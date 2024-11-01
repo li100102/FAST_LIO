@@ -22,7 +22,7 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)" )
   message("Processer number:  ${N}")
   if(N GREATER 4)
     add_definitions(-DMP_EN)
-    add_definitions(-DMP_PROC_NUM=3)
+    add_definitions(-DMP_PROC_NUM=${N})
     message("core for MP: 3")
   elseif(N GREATER 3)
     add_definitions(-DMP_EN)
@@ -54,10 +54,13 @@ find_package(catkin REQUIRED COMPONENTS
   livox_ros_driver
   message_generation
   eigen_conversions
+  cv_bridge
+  message_filters
 )
 
 find_package(Eigen3 REQUIRED)
 find_package(PCL 1.8 REQUIRED)
+find_package(OpenCV REQUIRED)
 
 message(Eigen: ${EIGEN3_INCLUDE_DIR})
 
@@ -87,3 +90,15 @@ catkin_package(
 add_executable(fastlio_mapping src/laserMapping.cpp include/ikd-Tree/ikd_Tree.cpp src/preprocess.cpp)
 target_link_libraries(fastlio_mapping ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${PYTHON_LIBRARIES})
 target_include_directories(fastlio_mapping PRIVATE ${PYTHON_INCLUDE_DIRS})
+
+add_executable(project src/project.cpp)
+target_link_libraries(project ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${OpenCV_LIBS})
+
+add_executable(concat_pcd src/concat_pcd.cpp)
+target_link_libraries(concat_pcd ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
+add_executable(gicp src/gicp.cpp)
+target_link_libraries(gicp ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
+add_executable(tum_pose_trans src/TUM_pose_trans.cpp)
+target_link_libraries(tum_pose_trans ${catkin_LIBRARIES})

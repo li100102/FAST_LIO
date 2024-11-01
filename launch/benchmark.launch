@@ -1,0 +1,7 @@
+<launch>
+  <arg name="bag" default="hilti.bag"/>
+  <!-- <include file="$(find fast_lio)/launch/hilti.launch"/> -->
+  <include file="$(find fast_lio)/launch/mars.launch"/>
+  <node pkg="rosbag" type="play" name="rosbag" args="$(arg bag) -s 70"  required="true"/>
+  launch-prefix="bash -c 'sleep 3; exec '" -r 1.5
+</launch>
